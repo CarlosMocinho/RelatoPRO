@@ -20,3 +20,6 @@ Falta Fazer
  * landing page
  * pagina de conta 
  * compartilhamento de relatorios
+ * poder compartilhar um relatorio em especifico
+ * opção de enexar imagens
+ * cnpj ou informações a respeito de quem preencheu o relatorio

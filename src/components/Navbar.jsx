@@ -39,7 +39,7 @@ const Navbar = () => {
     <StyledNavbar>
       <div className="logo">
         <Link to="/">
-          <img src="/src/assets/RelatoPRO.png" alt="RelatoPRO Logo" />
+        <img src="/RelatoPRO.png" alt="RelatoPRO" />
         </Link>
       </div>
       <div className="nav-links">

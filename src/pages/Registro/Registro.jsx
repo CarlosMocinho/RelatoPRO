@@ -1,22 +1,30 @@
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../../firebaseConfig";
 import styled from "styled-components";
 
 const Registro = () => {
+  const [nome, setNome] = useState(""); // Novo estado para o nome
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const navigate = useNavigate(); // Hook para redirecionamento
 
   const handleRegister = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, email, senha);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+      const user = userCredential.user;
+
+      // Atualizar o perfil do usuário com o nome fornecido
+      await updateProfile(user, {
+        displayName: nome,
+      });
+
       alert("Conta criada com sucesso! Seja Bem vindo");
       navigate("/"); // Redireciona para a página inicial
     } catch (error) {
       console.error("Erro ao criar conta:", error.message);
-      alert("Erro ao criar conta Dados Ja cadastrados ");
+      alert("Erro ao criar conta: " + error.message);
     }
   };
 
@@ -39,6 +47,16 @@ const Registro = () => {
         <p className="subtitulo">Por favor insira seus dados</p>
         <form>
           <div className="input-group">
+            <label>Nome</label>
+            <input
+              type="text"
+              placeholder="Digite seu nome"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-group">
             <label>Email</label>
             <input
               type="email"
@@ -49,10 +67,10 @@ const Registro = () => {
             />
           </div>
           <div className="input-group">
-            <label>Password</label>
+            <label>Senha</label>
             <input
               type="password"
-              placeholder="Insira Sua Senha"
+              placeholder="Insira sua senha"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               required
@@ -63,7 +81,7 @@ const Registro = () => {
           </button>
         </form>
         <p>
-          Ja possui registro? <Link to="/login">Faça Login!</Link>
+          Já possui registro? <Link to="/login">Faça Login!</Link>
         </p>
         <div className="divider">or</div>
         <button type="button" onClick={handleGoogleLogin} className="google-btn">

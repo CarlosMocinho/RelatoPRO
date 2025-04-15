@@ -39,7 +39,7 @@ const Navbar = () => {
     <StyledNavbar>
       <div className="logo">
         <Link to="/">
-        <img src="/RelatoPRO.png" alt="RelatoPRO" />
+          <img src="/RelatoPRO.png" alt="RelatoPRO" />
         </Link>
       </div>
       <div className="nav-links">
@@ -51,11 +51,28 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="profile-menu">
+        <div className="welcome">
+          {user ? (
+            <>
+              
+              <p><span>👋 </span>
+                Olá, <strong>{user.displayName}</strong>
+                <br />
+                Seja bem-vindo!
+              </p>
+            </>
+          ) : (
+            <div>
+              <h1>Por favor</h1> 
+              <p>Entre ou crie sua conta</p>
+            </div>
+          )}
+        </div>
         <div className="avatar" onClick={toggleDropdown}>
           <img
             src={
               user?.photoURL ||
-              "\Usuariopadrao.png" // Imagem padrão para usuários logados por email/senha
+              "/Usuariopadrao.png" // Imagem padrão para usuários logados por email/senha
             }
             alt="User Avatar"
           />
@@ -79,7 +96,6 @@ const Navbar = () => {
           </div>
         )}
       </div>
-      {/* Fecha o dropdown ao clicar fora */}
       {isDropdownVisible && <div className="overlay" onClick={closeDropdown}></div>}
     </StyledNavbar>
   );
@@ -100,10 +116,14 @@ const StyledNavbar = styled.nav`
     height: 40px;
     cursor: pointer;
   }
+  
 
   .nav-links {
     display: flex;
     gap: 1.5rem;
+    position: absolute; /* Posiciona os links no centro */
+    left: 50%; /* Move para o centro horizontal */
+    transform: translateX(-50%); /* Centraliza perfeitamente */
 
     a {
       display: flex;
@@ -121,7 +141,31 @@ const StyledNavbar = styled.nav`
   }
 
   .profile-menu {
+    display: flex;
+    align-items: center;
     position: relative;
+
+    .welcome {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      margin-right: 1rem;
+      color: white;
+
+      span {
+        font-size: 0.9rem;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+        text-align: right;
+
+        strong {
+          font-weight: bold;
+        }
+      }
+    }
 
     .avatar {
       cursor: pointer;

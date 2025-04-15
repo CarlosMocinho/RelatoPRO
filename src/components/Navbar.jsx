@@ -55,7 +55,7 @@ const Navbar = () => {
           <img
             src={
               user?.photoURL ||
-              "https://via.placeholder.com/40" // Imagem padrão para usuários logados por email/senha
+              "\Usuariopadrao.png" // Imagem padrão para usuários logados por email/senha
             }
             alt="User Avatar"
           />

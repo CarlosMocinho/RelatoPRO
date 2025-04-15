@@ -15,6 +15,16 @@ const Conta = () => {
   const storage = getStorage(); // Instância do Firebase Storage
 
   const handleUpdateProfile = async () => {
+    if (nome.trim().length < 5 || nome.trim().length > 20) {
+      alert("O nome deve ter entre 5 e 20 caracteres.");
+      return;
+    }
+
+    if (!foto) {
+      alert("Por favor, insira uma URL válida para a foto.");
+      return;
+    }
+
     try {
       await updateProfile(auth.currentUser, {
         displayName: nome,

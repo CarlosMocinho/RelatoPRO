@@ -11,6 +11,11 @@ const Registro = () => {
   const navigate = useNavigate(); // Hook para redirecionamento
 
   const handleRegister = async () => {
+    if (nome.trim().length < 5 || nome.trim().length > 20) {
+      alert("O nome deve ter entre 5 e 20 caracteres.");
+      return;
+    }
+
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
       const user = userCredential.user;

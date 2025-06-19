@@ -148,17 +148,6 @@ const Conta = () => {
                     value={nome}
                     onChange={(e) => setNome(e.target.value)}
                   />
-                  <input
-                    type="text"
-                    placeholder="URL da foto (opcional)"
-                    value={foto}
-                    onChange={(e) => setFoto(e.target.value)}
-                  />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setFoto(e.target.files[0])}
-                  />
                   <button type="submit">Salvar alterações</button>
                 </form>
               )}
@@ -274,13 +263,6 @@ const ContaWrapper = styled.div`
 
       input[type="text"] {
         padding: 0.8rem;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 1rem;
-      }
-
-      input[type="file"] {
-        padding: 0.5rem;
         border: 1px solid #ccc;
         border-radius: 5px;
         font-size: 1rem;

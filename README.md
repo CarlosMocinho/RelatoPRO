@@ -19,7 +19,12 @@ Falta Fazer
  * filtros na aba de mostrar realtorios
  * landing page
  * pagina de conta 
- * compartilhamento de relatorios
- * poder compartilhar um relatorio em especifico
  * opção de enexar imagens
  * cnpj ou informações a respeito de quem preencheu o relatorio
+__________________________
+ * remover secretaria
+ * integrar outras pessoas para verem os relatorios em tempo real
+ * refazer ABA RELATORIOS de forma mais organizada e que seja mais agradavel ao olhar
+ * terminar a pagina de conta junto com o sistema de adicionar leitor
+ * Exportar relatorios no formato XML
+ * 

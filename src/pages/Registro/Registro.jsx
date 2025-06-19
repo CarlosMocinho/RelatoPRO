@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../../../firebaseConfig";
+import { auth, db } from "../../../firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 import styled from "styled-components";
 
 const Registro = () => {
@@ -25,6 +26,12 @@ const Registro = () => {
         displayName: nome,
       });
 
+      // Adicionar dados do usuário ao Firestore
+      await setDoc(doc(db, "Users", user.uid), {
+        nome: nome,
+        email: email,
+      });
+
       alert("Conta criada com sucesso! Seja Bem vindo");
       navigate("/"); // Redireciona para a página inicial
     } catch (error) {
@@ -36,9 +43,15 @@ const Registro = () => {
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      // Salva o nome no Firestore se não existir
+      await setDoc(doc(db, "Users", user.uid), {
+        nome: user.displayName || "Usuário",
+        email: user.email,
+      }, { merge: true });
       alert("Login com Google realizado com sucesso! Seja bem vindo");
-      navigate("/"); // Redireciona para a página inicial
+      navigate("/");
     } catch (error) {
       console.error("Erro ao fazer login com Google:", error.message);
       alert("Erro ao fazer login com Google Por favor tente novamente");

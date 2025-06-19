@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import styled from "styled-components";
 import { auth } from "../../../firebaseConfig";
 import { updateProfile } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
 
 const Conta = () => {
   const [user] = useAuthState(auth); // Obter o usuário autenticado
@@ -12,7 +14,22 @@ const Conta = () => {
   const [foto, setFoto] = useState(user?.photoURL || "");
   const [isEditing, setIsEditing] = useState(false);
   const [uploading, setUploading] = useState(false); // Estado para indicar upload
+  const [liderId, setLiderId] = useState(""); // Novo estado para o ID do líder
+  const [loadingLider, setLoadingLider] = useState(true);
   const storage = getStorage(); // Instância do Firebase Storage
+
+  useEffect(() => {
+    async function fetchLiderId() {
+      if (!user) return;
+      const userDocRef = doc(db, "Users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists() && userDocSnap.data().liderId) {
+        setLiderId(userDocSnap.data().liderId);
+      }
+      setLoadingLider(false);
+    }
+    fetchLiderId();
+  }, [user]);
 
   const handleUpdateProfile = async () => {
     if (nome.trim().length < 5 || nome.trim().length > 20) {
@@ -58,6 +75,45 @@ const Conta = () => {
     }
   };
 
+  const handleSaveLiderId = async () => {
+    if (!user) return;
+    try {
+      const userDocRef = doc(db, "Users", user.uid);
+      await setDoc(userDocRef, { liderId }, { merge: true });
+      alert("ID do líder salvo com sucesso!");
+    } catch (error) {
+      alert("Erro ao salvar ID do líder: " + error.message);
+    }
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    // Atualiza apenas os campos preenchidos
+    const updates = {};
+    if (nome && nome.trim() !== "") updates.displayName = nome;
+    if (foto && typeof foto === "string" && foto.trim() !== "") updates.photoURL = foto;
+
+    let photoURL = null;
+    if (foto) {
+      const storageRef = ref(storage, `usuarios/${auth.currentUser.uid}/fotoPerfil.jpg`);
+      await uploadBytes(storageRef, foto);
+      photoURL = await getDownloadURL(storageRef);
+    }
+    // Só adiciona photoURL se existir
+    if (photoURL) updates.photoURL = photoURL;
+
+    try {
+      if (Object.keys(updates).length > 0) {
+        await updateProfile(auth.currentUser, updates);
+      }
+      // Atualize outros campos no Firestore se necessário
+      alert("Conta atualizada com sucesso!");
+    } catch (error) {
+      alert("Erro ao atualizar conta: " + error.message);
+    }
+  };
+
   return (
     <ContaWrapper>
       <Navbar />
@@ -74,6 +130,9 @@ const Conta = () => {
               <p>
                 <strong>Email:</strong> {user.email}
               </p>
+              <p>
+                <strong>ID do Usuário:</strong> {user.uid}
+              </p>
               {!isEditing ? (
                 <>
                   <p>
@@ -82,26 +141,57 @@ const Conta = () => {
                   <button onClick={() => setIsEditing(true)}>Editar Perfil</button>
                 </>
               ) : (
-                <div className="edit-form">
-                  <label>Nome:</label>
+                <form className="edit-form" onSubmit={handleUpdate}>
                   <input
                     type="text"
+                    placeholder="Nome"
                     value={nome}
                     onChange={(e) => setNome(e.target.value)}
                   />
-                  <label>Foto (Upload):</label>
+                  <input
+                    type="text"
+                    placeholder="URL da foto (opcional)"
+                    value={foto}
+                    onChange={(e) => setFoto(e.target.value)}
+                  />
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={handleUploadPhoto}
+                    onChange={(e) => setFoto(e.target.files[0])}
                   />
-                  {uploading && <p>Enviando foto...</p>}
-                  <div className="buttons">
-                    <button onClick={handleUpdateProfile}>Salvar</button>
-                    <button onClick={() => setIsEditing(false)}>Cancelar</button>
-                  </div>
-                </div>
+                  <button type="submit">Salvar alterações</button>
+                </form>
               )}
+              <div style={{ marginTop: "1.5rem", marginBottom: "1rem" }}>
+                <label>
+                  <strong>ID do Líder:</strong>
+                  <input
+                    type="text"
+                    value={liderId}
+                    onChange={(e) => setLiderId(e.target.value)}
+                    style={{
+                      marginLeft: "0.5rem",
+                      padding: "0.3rem",
+                      borderRadius: "5px",
+                      border: "1px solid #ccc",
+                    }}
+                  />
+                  <button
+                    style={{
+                      marginLeft: "0.5rem",
+                      padding: "0.3rem 0.8rem",
+                      borderRadius: "5px",
+                      background: "#0d47a1",
+                      color: "white",
+                      border: "none",
+                    }}
+                    onClick={handleSaveLiderId}
+                    disabled={loadingLider}
+                  >
+                    Salvar
+                  </button>
+                </label>
+              </div>
             </div>
           </div>
         ) : (
@@ -196,33 +286,27 @@ const ContaWrapper = styled.div`
         font-size: 1rem;
       }
 
-      .buttons {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
+      button {
+        background-color: #0d47a1;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
         margin-top: 1rem;
+      }
 
-        button {
-          background-color: #0d47a1;
-          color: white;
-          padding: 0.5rem 1rem;
-          border: none;
-          border-radius: 8px;
-          cursor: pointer;
-        }
+      button:hover {
+        background-color: rgb(1, 31, 82);
+      }
 
-        button:hover {
-          background-color: rgb(1, 31, 82);
-        }
+      button:last-child {
+        background-color: #ccc;
+        color: black;
+      }
 
-        button:last-child {
-          background-color: #ccc;
-          color: black;
-        }
-
-        button:last-child:hover {
-          background-color: #aaa;
-        }
+      button:last-child:hover {
+        background-color: #aaa;
       }
     }
   }

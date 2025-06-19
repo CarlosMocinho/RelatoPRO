@@ -4,7 +4,7 @@ import Navbar  from "../../components/Navbar";
 const Error = () => {
   return (
     <div>
-      <navbar/>
+      <Navbar/>
       <h1>ERRO 404 - Página não encontrada</h1>
       <p>Por favor retorne a pagina inicial</p>
     </div>

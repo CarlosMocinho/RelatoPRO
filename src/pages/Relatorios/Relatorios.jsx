@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TabelaRelatorios from './TabelaRelatorios';
+import TabelaRelatoriosCompartilhados from './TabelaRelatoriosCompartilhados'; // Crie este componente se ainda não existir
 import styled from 'styled-components';
 import Navbar  from "../../components/Navbar";
 
 const Relatorios = () => {
+  const [mostrarCompartilhados, setMostrarCompartilhados] = useState(false);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -15,7 +18,18 @@ const Relatorios = () => {
       <div>
       <div className="content">
         <h1 className="titulo">Relatórios de Serviços</h1>
+        <BarraAcoes>
+          <BotaoAzul
+            onClick={() => setMostrarCompartilhados((prev) => !prev)}
+          >
+            {mostrarCompartilhados ? "Mostrar meus relatórios" : "Trocar Para Relatorios compartilhados"}
+          </BotaoAzul>
+        </BarraAcoes>
+        {mostrarCompartilhados ? (
+        <TabelaRelatoriosCompartilhados />
+      ) : (
         <TabelaRelatorios />
+      )}
         <div className="botoes">
           <a href="/novo-relatorio">
           <button>Adicionar Relatorio</button>
@@ -73,5 +87,29 @@ const Wrapper = styled.div`
     a {
       text-decoration: none;
     }
+  }
+`;
+
+const BarraAcoes = styled.div`
+  width: 90%;
+  margin: 0 auto 0.5rem auto;
+  display: flex;
+  align-items: center;
+`;
+
+const BotaoAzul = styled.button`
+  background: #165bbd;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 0.3rem 1.1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(22,91,189,0.08);
+  transition: background 0.2s;
+  margin-bottom: 0.5rem;
+  &:hover {
+    background: #0d47a1;
   }
 `;

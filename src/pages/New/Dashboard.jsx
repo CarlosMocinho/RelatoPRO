@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from 'styled-components';
 import { db, auth } from "../../../firebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, getDoc, collection, addDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { shareReport } from "../RelatoriosGerais/ShareReport";
 
 
 
@@ -10,7 +11,6 @@ function Dashboard() {
   const [formData, setFormData] = useState({
     dia: "",
     local: "",
-    secretaria: "",
     problema: "",
     solucao: ""
   });
@@ -30,12 +30,22 @@ function Dashboard() {
 
     try {
       const userRef = collection(db, "Users", user.uid, "Relatorios");
-      await addDoc(userRef, formData);
+      const docRef = await addDoc(userRef, formData);
+
+      // Busca o liderId do usuário
+      const userDocRef = doc(db, "Users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      const liderId = userDocSnap.exists() ? userDocSnap.data().liderId : null;
+
+      // Compartilha automaticamente com o líder, se houver
+      if (liderId) {
+        await shareReport(docRef.id, liderId);
+      }
+
       alert("Relatório salvo com sucesso!");
       setFormData({
         dia: "",
         local: "",
-        secretaria: "",
         problema: "",
         solucao: ""
       });
@@ -52,7 +62,6 @@ function Dashboard() {
         <form onSubmit={handleSubmit}>
           <input type="date" name="dia" value={formData.dia} onChange={handleChange} required />
           <input type="text" name="local" placeholder="Local" value={formData.local} onChange={handleChange} required />
-          <input type="text" name="secretaria" placeholder="Secretaria" value={formData.secretaria} onChange={handleChange} required />
           <textarea name="problema" placeholder="Problema" value={formData.problema} onChange={handleChange} required />
           <textarea name="solucao" placeholder="Solução" value={formData.solucao} onChange={handleChange} required />
           <button type="submit">Salvar</button>

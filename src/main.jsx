@@ -11,6 +11,7 @@ import Registro from './pages/Registro/Registro.jsx';
 import Relatorios from './pages/Relatorios/Relatorios.jsx';
 import New from './pages/New/New.jsx';
 import Conta from './pages/Conta/Conta.jsx';
+import RelatoriosGerais from './pages/RelatoriosGerais/RelatoriosGerais.jsx';
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: "/conta",
     element: <Conta/>,
+  },
+  {
+    path: "/RelatoriosGerais",
+    element: <RelatoriosGerais/>,
   },
 ]);
 

@@ -138,7 +138,7 @@ const Conta = () => {
                   <p>
                     <strong>Nome:</strong> {user.displayName || "Usuário"}
                   </p>
-                  <button onClick={() => setIsEditing(true)}>Editar Perfil</button>
+                  <button onClick={() => setIsEditing(true)}>Editar Nome</button>
                 </>
               ) : (
                 <form className="edit-form" onSubmit={handleUpdate}>
@@ -194,23 +194,24 @@ const Conta = () => {
 export default Conta;
 
 const ContaWrapper = styled.div`
-  background-color: #f6f7f9;
   min-height: 100vh;
+  background: linear-gradient(90deg, #165bbd 60%, #ffe066 100%);
 
   .container {
     max-width: 600px;
     margin: 2rem auto;
     background: white;
     padding: 2rem;
-    border-radius: 12px;
+    border-radius: 18px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     text-align: center;
   }
 
   h1 {
-    font-size: 1.8rem;
-    color: #0d47a1;
+    font-size: 2rem;
+    color: #165bbd;
     margin-bottom: 1.5rem;
+    font-weight: bold;
   }
 
   .profile {
@@ -223,8 +224,9 @@ const ContaWrapper = styled.div`
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      border: 2px solid #0d47a1;
+      border: 3px solid #ffe066;
       object-fit: cover;
+      background: #f6f7f9;
     }
 
     .info {
@@ -234,20 +236,23 @@ const ContaWrapper = styled.div`
       p {
         font-size: 1rem;
         margin: 0.5rem 0;
+        color: #165bbd;
       }
 
       button {
-        background-color: #0d47a1;
+        background-color: #165bbd;
         color: white;
         padding: 0.5rem 1rem;
         border: none;
         border-radius: 8px;
         cursor: pointer;
         margin-top: 1rem;
+        font-weight: bold;
+        transition: background 0.2s;
       }
 
       button:hover {
-        background-color: rgb(1, 31, 82);
+        background-color: #0d47a1;
       }
     }
 
@@ -259,6 +264,7 @@ const ContaWrapper = styled.div`
       label {
         font-size: 0.9rem;
         text-align: left;
+        color: #165bbd;
       }
 
       input[type="text"] {
@@ -269,26 +275,28 @@ const ContaWrapper = styled.div`
       }
 
       button {
-        background-color: #0d47a1;
+        background-color: #165bbd;
         color: white;
         padding: 0.5rem 1rem;
         border: none;
         border-radius: 8px;
         cursor: pointer;
         margin-top: 1rem;
+        font-weight: bold;
+        transition: background 0.2s;
       }
 
       button:hover {
-        background-color: rgb(1, 31, 82);
+        background-color: #0d47a1;
       }
 
       button:last-child {
-        background-color: #ccc;
-        color: black;
+        background-color: #ffe066;
+        color: #165bbd;
       }
 
       button:last-child:hover {
-        background-color: #aaa;
+        background-color: #ffd700;
       }
     }
   }

@@ -117,6 +117,7 @@ const RegistroWrapper = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background: linear-gradient(90deg, #165bbd 60%, #ffe066 100%);
 
   .right-panel {
     flex: 1;
@@ -125,20 +126,27 @@ const RegistroWrapper = styled.div`
     justify-content: center;
     align-items: center;
     padding: 2rem;
+    background: white;
+    border-radius: 18px;
+    max-width: 400px;
+    margin: auto;
 
     h1 {
       font-size: 2rem;
       margin-bottom: -1rem;
+      color: #165bbd;
+      font-weight: bold;
     }
 
     .subtitulo {
       font-size: 1rem;
       margin-bottom: 3rem;
+      color: #165bbd;
     }
 
     form {
       width: 100%;
-      max-width: 400px;
+      max-width: 340px;
 
       .input-group {
         display: flex;
@@ -146,8 +154,9 @@ const RegistroWrapper = styled.div`
         margin-bottom: 1rem;
 
         label {
-          font-size: 0.9rem;
+          font-size: 0.95rem;
           margin-bottom: 0.5rem;
+          color: #165bbd;
         }
 
         input {
@@ -161,16 +170,19 @@ const RegistroWrapper = styled.div`
       .register-btn {
         width: 100%;
         padding: 0.8rem;
-        background-color: black;
+        background-color: #165bbd;
         color: white;
         border: none;
         border-radius: 5px;
         font-size: 1rem;
         cursor: pointer;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        transition: background 0.2s;
       }
 
       .register-btn:hover {
-        background-color: #333;
+        background-color: #0d47a1;
       }
     }
 
@@ -179,7 +191,7 @@ const RegistroWrapper = styled.div`
       margin-top: 1rem;
 
       a {
-        color: #007bff;
+        color: #165bbd;
         text-decoration: none;
       }
 
@@ -196,21 +208,24 @@ const RegistroWrapper = styled.div`
 
     .google-btn {
       width: 100%;
-      max-width: 400px;
+      max-width: 340px;
       padding: 0.8rem;
-      background-color: white;
-      color: black;
-      border: 1px solid #ccc;
+      background-color: #ffe066;
+      color: #165bbd;
+      border: none;
       border-radius: 5px;
       font-size: 1rem;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      transition: background 0.2s;
     }
 
     .google-btn:hover {
-      background-color: #f5f5f5;
+      background-color: #ffd700;
     }
   }
 `;

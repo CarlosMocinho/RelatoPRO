@@ -238,12 +238,12 @@ const TabelaRelatorios = () => {
           {registros.map((item) => (
             <tr key={item.id}>
               <td>
-                <IconButton title="Compartilhar" onClick={() => handleShare(item.id)}>
+                <IconButtonShare title="Compartilhar" onClick={() => handleShare(item.id)}>
                   <FaShareAlt />
-                </IconButton>
-                <IconButton title="Excluir" onClick={() => handleDelete(item.id)}>
+                </IconButtonShare>
+                <IconButtonDelete title="Excluir" onClick={() => handleDelete(item.id)}>
                   <FaTrash />
-                </IconButton>
+                </IconButtonDelete>
               </td>
               <td>{item.dia}</td>
               <td>{item.local}</td>
@@ -266,9 +266,9 @@ const TabelaRelatorios = () => {
                 )}
               </td>
               <td>
-                <IconButton title="Ver mais" onClick={() => handleShowModal(item)}>
+                <IconButtonView title="Ver mais" onClick={() => handleShowModal(item)}>
                   <FaPlus />
-                </IconButton>
+                </IconButtonView>
               </td>
             </tr>
           ))}
@@ -355,21 +355,42 @@ const StyledTable = styled.table`
 `;
 
 const IconButton = styled.button`
-  background: #165bbd;
-  color: #fff;
   border: none;
   border-radius: 6px;
   padding: 0.3rem 0.5rem;
   margin-right: 0.3rem;
   font-size: 1.1rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+`;
 
+export const IconButtonDelete = styled(IconButton)`
+  background: #e53935;
+  color: #fff;
   &:hover {
-    background: #0d47a1;
+    background: #b71c1c;
+  }
+`;
+
+// Botão de ver mais (amarelo)
+export const IconButtonView = styled(IconButton)`
+  background: #ffe066;
+  color: darkblue;
+  &:hover {
+    background: #ffd700;
+    color: #0d47a1;
+  }
+`;
+
+// Botão de compartilhar (verde)
+export const IconButtonShare = styled(IconButton)`
+  background: #43a047;
+  color: #fff;
+  &:hover {
+    background: #1b5e20;
   }
 `;
 

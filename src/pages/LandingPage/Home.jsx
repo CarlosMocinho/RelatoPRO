@@ -1,11 +1,26 @@
 import React from "react";
 import Navbar from "../../components/Navbar";
 import styled from "styled-components";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 const RelatoPROLogo = "/RelatoPRO.png";
 const UserDefault = "/Usuariopadrao.png";
 
 const Home = () => {
+  const [user] = useAuthState(auth);
+  const navigate = useNavigate();
+
+  const handleComeceAgora = (e) => {
+    e.preventDefault();
+    if (user) {
+      navigate("/relatorios");
+    } else {
+      navigate("/registro");
+    }
+  };
+
   return (
     <LandingWrapper>
       <Navbar />
@@ -19,9 +34,9 @@ const Home = () => {
               Organize, compartilhe e registre relatórios de serviços de forma simples, rápida e segura.<br />
               Sua rotina profissional mais eficiente e colaborativa!
             </p>
-            <a href="/registro" className="cta-btn">
+            <button className="cta-btn" onClick={handleComeceAgora}>
               Comece Agora
-            </a>
+            </button>
           </div>
           <img src={RelatoPROLogo} alt="Logo RelatoPRO" className="hero-img" />
         </div>
@@ -50,7 +65,20 @@ const Home = () => {
 
       <section className="about">
         <div className="about-content">
-          <img src={UserDefault} alt="Usuário padrão" className="about-img" />
+          <a
+            href="https://github.com/CarlosMocinho"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: "inline-block" }}
+            title="Ver GitHub Do criador"
+          >
+            <img
+              src="https://avatars.githubusercontent.com/u/140860836?v=4"
+              alt="Carlos Mocinho"
+              className="about-img"
+              style={{ cursor: "pointer" }}
+            />
+          </a>
           <div>
             <h2>Sobre o RelatoPRO</h2>
             <p>
@@ -113,6 +141,7 @@ const LandingWrapper = styled.div`
       box-shadow: 0 2px 8px rgba(22,91,189,0.08);
       transition: background 0.2s, color 0.2s;
       border: none;
+      cursor: pointer;
       &:hover {
         background: #ffd700;
         color: #0d47a1;

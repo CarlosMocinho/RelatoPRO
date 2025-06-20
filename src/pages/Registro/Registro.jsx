@@ -46,10 +46,14 @@ const Registro = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       // Salva o nome no Firestore se não existir
-      await setDoc(doc(db, "Users", user.uid), {
-        nome: user.displayName || "Usuário",
-        email: user.email,
-      }, { merge: true });
+      await setDoc(
+        doc(db, "Users", user.uid),
+        {
+          nome: user.displayName || "Usuário",
+          email: user.email,
+        },
+        { merge: true }
+      );
       alert("Login com Google realizado com sucesso! Seja bem vindo");
       navigate("/");
     } catch (error) {

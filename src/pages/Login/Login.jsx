@@ -3,6 +3,8 @@ import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../../firebaseConfig";
 import styled from "styled-components";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../../firebaseConfig"; // Importe o db se ainda não estiver feito
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -23,7 +25,17 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      // Sempre salva/atualiza o nome do Google no Firestore
+      await setDoc(
+        doc(db, "Users", user.uid),
+        {
+          nome: user.displayName || "Usuário",
+          email: user.email,
+        },
+        { merge: true }
+      );
       alert("Login com Google realizado com sucesso! Seja bem vindo");
       navigate("/"); // Redireciona para a página inicial
     } catch (error) {

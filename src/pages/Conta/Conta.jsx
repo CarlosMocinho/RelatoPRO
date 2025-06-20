@@ -47,6 +47,9 @@ const Conta = () => {
         displayName: nome,
         photoURL: foto,
       });
+      await setDoc(doc(db, "Users", user.uid), {
+        nome: nome,
+      }, { merge: true });
       alert("Perfil atualizado com sucesso!");
       setIsEditing(false);
     } catch (error) {

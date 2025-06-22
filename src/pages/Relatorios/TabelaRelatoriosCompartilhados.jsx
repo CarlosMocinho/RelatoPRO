@@ -180,9 +180,25 @@ const StyledTable = styled.table`
   tbody tr {
     background: #f8f9fa;
     transition: background 0.2s;
+    position: relative;
+    border-bottom: 2px solid #165bbd;
   }
   tbody tr:hover {
     background: #e3eaf6;
+  }
+
+  /* Responsividade: mostra só ações, data e local em telas pequenas */
+  @media (max-width: 700px) {
+    th, td {
+      font-size: 0.95rem;
+      padding: 0.6rem 0.3rem;
+    }
+    th:not(:nth-child(2)):not(:nth-child(3)),
+    td:not(:nth-child(2)):not(:nth-child(3)) {
+      display: none;
+    }
+    width: 100vw;
+    min-width: 0;
   }
 `;
 

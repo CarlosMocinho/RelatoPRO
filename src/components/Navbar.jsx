@@ -43,19 +43,21 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="nav-links">
-        <Link to="/relatorios">
-          <FaFileAlt /> Relatórios
+        <Link to="/relatorios" className="nav-relatorios">
+          <FaFileAlt />
+          <span className="nav-text">Relatórios</span>
         </Link>
-        <Link to="/novo-relatorio">
-          <FaPlus /> Novo Relatório
+        <Link to="/novo-relatorio" className="nav-novo-relatorio">
+          <FaPlus />
+          <span className="nav-text">Novo Relatório</span>
         </Link>
       </div>
       <div className="profile-menu">
         <div className="welcome">
           {user ? (
             <>
-              
-              <p><span>👋 </span>
+              <p>
+                <span>👋 </span>
                 Olá, <strong>{user.displayName}</strong>
                 <br />
                 Seja bem-vindo!
@@ -63,7 +65,7 @@ const Navbar = () => {
             </>
           ) : (
             <div>
-              <h1>Por favor</h1> 
+              <h1>Por favor</h1>
               <p>Entre ou crie sua conta</p>
             </div>
           )}
@@ -116,11 +118,10 @@ const StyledNavbar = styled.nav`
     height: 40px;
     cursor: pointer;
   }
-  
 
   .nav-links {
     display: flex;
-    gap: 1.5rem;
+    gap: 2.7rem; /* Aumenta o espaçamento entre os ícones */
     position: absolute; /* Posiciona os links no centro */
     left: 50%; /* Move para o centro horizontal */
     transform: translateX(-50%); /* Centraliza perfeitamente */
@@ -128,11 +129,15 @@ const StyledNavbar = styled.nav`
     a {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.7rem; /* Aumenta o espaço entre ícone e texto */
       color: white;
       text-decoration: none;
       font-size: 1rem;
       font-weight: bold;
+
+      .nav-text {
+        display: inline;
+      }
     }
 
     a:hover {
@@ -224,5 +229,25 @@ const StyledNavbar = styled.nav`
     height: 100%;
     background: transparent;
     z-index: 5;
+  }
+
+  @media (max-width: 700px) {
+    .nav-links {
+      gap: 1rem;
+
+      a {
+        font-size: 1.2rem;
+
+        .nav-text {
+          display: none;
+        }
+      }
+    }
+
+    .profile-menu {
+      .welcome {
+        display: none;
+      }
+    }
   }
 `;

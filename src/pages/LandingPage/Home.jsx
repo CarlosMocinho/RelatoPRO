@@ -116,6 +116,17 @@ const LandingWrapper = styled.div`
       max-width: 1100px;
       margin: 0 auto;
       flex-wrap: wrap;
+      @media (max-width: 600px) {
+        flex-direction: column;
+        gap: 1.2rem;
+        .hero-img {
+          display: none;
+        }
+        .cta-btn {
+          display: block;
+          margin: 0 auto;
+        }
+      }
     }
     h1 {
       font-size: 2.5rem;
@@ -146,6 +157,10 @@ const LandingWrapper = styled.div`
         background: #ffd700;
         color: #0d47a1;
       }
+      @media (max-width: 600px) {
+        margin: 0 auto;
+        display: block;
+      }
     }
     .hero-img {
       width: 180px;
@@ -155,6 +170,9 @@ const LandingWrapper = styled.div`
       box-shadow: 0 4px 16px rgba(22,91,189,0.12);
       object-fit: contain;
       border: 4px solid #ffe066;
+      @media (max-width: 600px) {
+        display: none;
+      }
     }
   }
 
@@ -226,6 +244,7 @@ const LandingWrapper = styled.div`
     letter-spacing: 0.5px;
   }
 
+  /* Responsividade */
   @media (max-width: 900px) {
     .hero-content, .about-content, .features {
       flex-direction: column;
@@ -234,6 +253,62 @@ const LandingWrapper = styled.div`
     }
     .hero-img, .about-img {
       margin-top: 1.5rem;
+    }
+    .features {
+      gap: 1rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .hero {
+      padding: 1.2rem 0 1rem 0;
+      .hero-content {
+        gap: 1.2rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+      .cta-btn {
+        font-size: 1rem;
+        padding: 0.7rem 1.2rem;
+      }
+      .hero-img {
+        width: 110px;
+        height: 110px;
+      }
+    }
+    .features {
+      margin: 1.2rem 0 1rem 0;
+      .feature-card {
+        min-width: 90vw;
+        max-width: 98vw;
+        padding: 1.2rem 0.7rem;
+        font-size: 0.95rem;
+      }
+    }
+    .about {
+      padding: 1.2rem 0;
+      .about-content {
+        gap: 1.2rem;
+      }
+      .about-img {
+        width: 90px;
+        height: 90px;
+      }
+      h2 {
+        font-size: 1.1rem;
+      }
+      p {
+        font-size: 0.98rem;
+        max-width: 98vw;
+      }
+    }
+    footer {
+      font-size: 0.95rem;
+      padding: 0.7rem 0 0.7rem 0;
     }
   }
 `;

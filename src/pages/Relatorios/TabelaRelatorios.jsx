@@ -20,6 +20,7 @@ const TabelaRelatorios = () => {
   const [user] = useAuthState(auth);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState({ open: false, id: null });
 
   useEffect(() => {
     const fetchRegistros = async () => {
@@ -226,7 +227,7 @@ const TabelaRelatorios = () => {
       <StyledTable>
         <thead>
           <tr>
-            <th>Ações</th>
+            <th className="acoes-col">Ações</th>
             <th>Data</th>
             <th>Local</th>
             <th>Defeito</th>
@@ -237,13 +238,16 @@ const TabelaRelatorios = () => {
         <tbody>
           {registros.map((item) => (
             <tr key={item.id}>
-              <td>
+              <td className="acoes-col">
                 <IconButtonShare title="Compartilhar" onClick={() => handleShare(item.id)}>
                   <FaShareAlt />
                 </IconButtonShare>
-                <IconButtonDelete title="Excluir" onClick={() => handleDelete(item.id)}>
+                <IconButtonDelete title="Excluir" onClick={() => setConfirmDelete({ open: true, id: item.id })}>
                   <FaTrash />
                 </IconButtonDelete>
+                <IconButtonView title="Ver mais" onClick={() => handleShowModal(item)}>
+                  <FaPlus />
+                </IconButtonView>
               </td>
               <td>{item.dia}</td>
               <td>{item.local}</td>
@@ -265,11 +269,7 @@ const TabelaRelatorios = () => {
                   item.solucao
                 )}
               </td>
-              <td>
-                <IconButtonView title="Ver mais" onClick={() => handleShowModal(item)}>
-                  <FaPlus />
-                </IconButtonView>
-              </td>
+              <td></td>
             </tr>
           ))}
         </tbody>
@@ -278,11 +278,27 @@ const TabelaRelatorios = () => {
         <Modal>
           <div className="modal-content">
             <div className="modal-header">
-              <div className="modal-title">
-                <strong>DATA: {modalContent.dia}</strong>
+              <div>
+                <div className="modal-title">
+                  <strong>DATA: {modalContent.dia}</strong>
+                </div>
+                <div className="modal-location">
+                  <strong>Local:</strong> {modalContent.local}
+                </div>
               </div>
-              <div className="modal-location">
-                <strong>Local:</strong> {modalContent.local}
+              <div className="modal-actions-right">
+                <IconButtonShare
+                  title="Compartilhar"
+                  onClick={() => handleShare(modalContent.id)}
+                >
+                  <FaShareAlt />
+                </IconButtonShare>
+                <IconButtonDelete
+                  title="Excluir"
+                  onClick={() => setConfirmDelete({ open: true, id: modalContent.id })}
+                >
+                  <FaTrash />
+                </IconButtonDelete>
               </div>
             </div>
             <div className="modal-section">
@@ -294,6 +310,27 @@ const TabelaRelatorios = () => {
               <div className="modal-text">{modalContent.solucao}</div>
             </div>
             <button onClick={handleCloseModal}>Fechar</button>
+          </div>
+        </Modal>
+      )}
+      {confirmDelete.open && (
+        <Modal>
+          <div className="modal-content" style={{ maxWidth: 350, minWidth: 0, textAlign: "center" }}>
+            <h3>Deseja realmente excluir este relatório?</h3>
+            <div style={{ marginTop: 20, display: "flex", justifyContent: "center", gap: 16 }}>
+              <BotaoAzul
+                onClick={() => {
+                  handleDelete(confirmDelete.id);
+                  setConfirmDelete({ open: false, id: null });
+                  handleCloseModal();
+                }}
+              >
+                Sim, excluir
+              </BotaoAzul>
+              <BotaoCancelar onClick={() => setConfirmDelete({ open: false, id: null })}>
+                Cancelar
+              </BotaoCancelar>
+            </div>
           </div>
         </Modal>
       )}
@@ -348,9 +385,42 @@ const StyledTable = styled.table`
   tbody tr {
     background: #f8f9fa;
     transition: background 0.2s;
+    position: relative;
   }
   tbody tr:hover {
     background: #e3eaf6;
+  }
+  tbody tr::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 4px;
+    background: #3f51e6;
+    border-radius: 0 0 8px 8px;
+    z-index: 1;
+  }
+
+  /* Responsividade: mostra só ações, data e local em telas pequenas */
+  @media (max-width: 700px) {
+    th, td {
+      font-size: 0.95rem;
+      padding: 0.6rem 0.3rem;
+    }
+    th:not(:first-child):not(:nth-child(2)):not(:nth-child(3)),
+    td:not(:first-child):not(:nth-child(2)):not(:nth-child(3)) {
+      display: none;
+    }
+    /* Esconde botões de compartilhar/excluir, deixa só ver mais */
+    .acoes-col {
+      button:not(:last-child) {
+        display: none;
+      }
+    }
+    width: 100vw;
+    min-width: 0;
   }
 `;
 
@@ -419,8 +489,26 @@ const Modal = styled.div`
     font-size: 1.1rem;
     border-radius: 8px 8px 0 0;
     display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .modal-title, .modal-location {
+    display: block;
+    margin-bottom: 0.2rem;
+    word-break: break-all;
+    max-width: 70vw;
+  }
+  .modal-actions-right {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-left: auto;
+  }
+  .modal-actions-right button {
+    margin: 0;
   }
   .modal-section {
     padding: 0.7rem 1rem 0.2rem 1rem;
@@ -462,6 +550,16 @@ const BarraAcoes = styled.div`
   margin: 0 auto 0.5rem auto;
   display: flex;
   align-items: center;
+  gap: 1rem;
+  justify-content: flex-start;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 0.7rem;
+  }
 `;
 
 const BotaoAzul = styled.button`
